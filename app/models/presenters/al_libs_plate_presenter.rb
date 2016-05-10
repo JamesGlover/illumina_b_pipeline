@@ -1,19 +1,17 @@
+#This file is part of Illumina-B Pipeline is distributed under the terms of GNU General Public License version 3 or later;
+#Please refer to the LICENSE and README files for information on licensing and authorship of this file.
+#Copyright (C) 2013,2015 Genome Research Ltd.
 module Presenters
   class AlLibsPlatePresenter < PlatePresenter
     include Presenters::Statemachine
 
     write_inheritable_attribute :authenticated_tab_states, {
       :pending     => [ 'labware-summary-button', 'labware-state-button' ],
-      :started     => [ 'labware-summary-button', 'labware-creation-button', 'labware-state-button' ],
-      :passed      => [ 'labware-summary-button', 'labware-creation-button', 'well-failing-button' ],
+      :started     => [ 'labware-summary-button', 'labware-state-button' ],
+      :passed      => [ 'labware-creation-button', 'labware-summary-button', 'well-failing-button' ],
       :fx_transfer => [ 'labware-summary-button' ],
       :cancelled   => [ 'labware-summary-button' ],
       :failed      => [ 'labware-summary-button' ]
-    }
-
-    write_inheritable_attribute :robot_controlled_states, {
-      :pending => 'fx',
-      :started => 'fx-add-tags'
     }
 
     state_machine :state, :initial => :pending do
@@ -24,14 +22,7 @@ module Presenters
       end
 
       state :started do
-        def control_additional_creation(&block)
-          yield unless default_child_purpose.nil?
-          nil
-        end
-
-        def default_child_purpose
-          labware.plate_purpose.children.first
-        end
+        include StateDoesNotAllowChildCreation
       end
 
       state :fx_transfer do
@@ -46,9 +37,15 @@ module Presenters
           nil
         end
 
+        def valid_purposes
+          yield default_child_purpose unless default_child_purpose.nil?
+          nil
+        end
+
         # Returns the child plate purposes that can be created in the passed state.
         def default_child_purpose
-          labware.plate_purpose.children.last
+          # Lib PCR
+          labware.plate_purpose.children.first
         end
       end
 

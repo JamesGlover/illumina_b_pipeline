@@ -1,3 +1,6 @@
+#This file is part of Illumina-B Pipeline is distributed under the terms of GNU General Public License version 3 or later;
+#Please refer to the LICENSE and README files for information on licensing and authorship of this file.
+#Copyright (C) 2011,2014 Genome Research Ltd.
 module ApplicationHelper
 
   module DeploymentInfo
@@ -29,5 +32,9 @@ module ApplicationHelper
 
   def custom_theme
     yield 'nonproduction' unless Rails.env == 'production'
+  end
+
+  def each_robot(&block)
+    Robots::Robot.each_robot(&block)
   end
 end

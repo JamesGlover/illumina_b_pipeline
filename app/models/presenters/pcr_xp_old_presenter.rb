@@ -1,3 +1,6 @@
+#This file is part of Illumina-B Pipeline is distributed under the terms of GNU General Public License version 3 or later;
+#Please refer to the LICENSE and README files for information on licensing and authorship of this file.
+#Copyright (C) 2013 Genome Research Ltd.
 class Presenters::PcrXpOldPresenter < Presenters::PcrXpPresenter
 
   write_inheritable_attribute :authenticated_tab_states, {
@@ -7,9 +10,6 @@ class Presenters::PcrXpOldPresenter < Presenters::PcrXpPresenter
     :qc_complete => [ 'labware-summary-button', 'labware-state-button' ],
     :cancelled   => [ 'labware-summary-button' ],
     :failed      => [ 'labware-summary-button' ]
-  }
-
-  write_inheritable_attribute :robot_controlled_states, {
   }
 
 end

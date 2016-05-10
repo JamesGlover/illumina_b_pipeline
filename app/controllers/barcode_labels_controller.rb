@@ -1,3 +1,6 @@
+#This file is part of Illumina-B Pipeline is distributed under the terms of GNU General Public License version 3 or later;
+#Please refer to the LICENSE and README files for information on licensing and authorship of this file.
+#Copyright (C) 2011,2013,2014,2015 Genome Research Ltd.
 class BarcodeLabelsController < ApplicationController
   before_filter :initialize_printer_and_barcode_service
   def initialize_printer_and_barcode_service
@@ -29,7 +32,7 @@ class BarcodeLabelsController < ApplicationController
     begin
       print(create_label(params[:label]))
       redirect_to(params[:redirect_to], :notice => "Barcode printed to #{@printer.name}")
-    rescue BarcodeException
+    rescue Sanger::Barcode::Printing::BarcodeException
       redirect_to(params[:redirect_to], :alert => "There was a problem with the printer. Select another and try again.")
     end
   end
@@ -45,7 +48,7 @@ class BarcodeLabelsController < ApplicationController
     begin
       print(params[:labels].map(&method(:create_label)))
       redirect_to(params[:redirect_to], :notice => "#{params[:labels].size} barcodes printed to #{@printer.try(:name)}")
-    rescue BarcodeException
+    rescue Sanger::Barcode::Printing::BarcodeException
       redirect_to(params[:redirect_to], :alert => "There was a problem with the printer. Select another and try again.")
     end
   end

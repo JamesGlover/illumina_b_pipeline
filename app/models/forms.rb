@@ -1,3 +1,6 @@
+#This file is part of Illumina-B Pipeline is distributed under the terms of GNU General Public License version 3 or later;
+#Please refer to the LICENSE and README files for information on licensing and authorship of this file.
+#Copyright (C) 2011,2012,2013 Genome Research Ltd.
 module Forms
   module Form
     module CustomPage
@@ -101,7 +104,7 @@ module Forms
     end
 
     def save!
-      raise StandardError, 'Invalid data' unless valid?
+      raise StandardError, 'Invalid data; ' + self.errors.full_messages.join('; ') unless valid?
 
       create_objects!
     end

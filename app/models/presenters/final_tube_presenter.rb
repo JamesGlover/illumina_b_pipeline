@@ -1,12 +1,10 @@
+#This file is part of Illumina-B Pipeline is distributed under the terms of GNU General Public License version 3 or later;
+#Please refer to the LICENSE and README files for information on licensing and authorship of this file.
+#Copyright (C) 2012,2013 Genome Research Ltd.
 module Presenters
   class FinalTubePresenter
     include Presenter
     include Statemachine::Shared
-
-    def location
-      # TODO: Consider adding location to tube api as well
-      :illumina_b
-    end
 
     class_inheritable_reader :labware_class
     write_inheritable_attribute :labware_class, :tube
@@ -76,7 +74,7 @@ module Presenters
       end
 
     end
-    
+
     def control_child_links
       # Do nothing
     end
@@ -99,12 +97,29 @@ module Presenters
       "#{labware.label.prefix} #{labware.label.text|| LABEL_TEXT}"
     end
 
+    def label_name
+      "#{labware.barcode.prefix} #{labware.barcode.number}"
+    end
+
+    def sample_count
+      labware.aliquots.count
+    end
+
+    def label_suffix
+      "P#{sample_count}"
+    end
+
+
     def labware_form_details(view)
       { :url => view.illumina_b_tube_path(self.labware), :as => :tube }
     end
 
     def qc_owner
       labware
+    end
+
+    def label_description
+      "#{prioritized_name(labware.name, 10)} #{label_text}"
     end
   end
 end

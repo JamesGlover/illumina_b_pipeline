@@ -1,3 +1,6 @@
+#This file is part of Illumina-B Pipeline is distributed under the terms of GNU General Public License version 3 or later;
+#Please refer to the LICENSE and README files for information on licensing and authorship of this file.
+#Copyright (C) 2011,2012,2013 Genome Research Ltd.
 class TubeCreationController < CreationController
 
   def form_lookup(form_attributes = params)
@@ -31,7 +34,7 @@ class TubeCreationController < CreationController
   end
 
   def create
-    @creation_form = create_form(params[:tube])
+    @creation_form = create_form(params[:tube].reverse_merge(:parent_uuid => params[:sequencescape_tube_id]))
 
     @creation_form.save!
     respond_to do |format|

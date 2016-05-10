@@ -66,7 +66,8 @@ body {
   height:27px;
   width:27px;
   padding: 3px;
-  text-align:     center;
+  text-align: center;
+  overflow: hidden;
   border: 1px ridge rgba(5,19,40,0.1);
   @include background(radial-gradient(top left, #002A46, #003353));
   @include border-radius(7px);
@@ -318,6 +319,27 @@ div.scan-plate a.bed-status-bad, div.scan-plate a.bed-status-good, div.scan-plat
   background: #C9FFC4;
 }
 
+div.tube_validation_report {
+  font-weight: initial;
+}
+
+div.tube_validation_report, .qc_validation_report div {
+  @include border-radius(4px);
+  padding: 10px;
+}
+.bad-tube div.tube_validation_report, .qc_validation_report .invalid {
+  border: 1px solid #FF7A7A;
+  background: #FFE6E6;
+}
+.good-tube div.tube_validation_report, .qc_validation_report .valid {
+  border: 1px solid #61D457;
+  background: #C9FFC4;
+}
+.wait-tube div.tube_validation_report {
+  border: 1px solid #FFFF7A;
+  background: #FFFFE6;
+}
+
 #key .tube-view { display: inline-block; }
 
 .barcode {
@@ -353,10 +375,32 @@ div.scan-plate a.bed-status-bad, div.scan-plate a.bed-status-good, div.scan-plat
   border-left: red 10px solid;
 }
 
-.ILB {
-  border-left: blue 10px double;
+.PWGS {
+  border-left: green 10px solid;
+}
+
+.ISC {
+  border-left: yellow 10px solid;
+}
+
+.ReISC {
+  border-left: yellow 10px dashed;
+}
+
+.HSqX {
+  border-left: blue 10px solid;
+}
+
+.MWGS {
+  border-left: orange 10px solid;
 }
 
 .print_selector .ui-controlgroup-controls {width:100%;}
 .print_selector .ui-controlgroup-controls .ui-select:first-child {width:80%;}
 .print_selector .ui-controlgroup-controls .ui-select {width:20%;}
+
+.ui-field-contain label.plate-label {
+    width: 4em;
+}
+
+.plate-box {display:inline-block !important;}

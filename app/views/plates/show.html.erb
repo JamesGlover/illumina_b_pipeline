@@ -10,19 +10,32 @@
 </script>
 
 
-
   <%= header(@presenter, 'Plate view') do %>
     <div data-role="navbar">
       <ul id="navbar">
         <li id="labware-summary-button"><a href="#" class="navbar-link" rel="labware-summary-button" data-transition="none" data-icon="info">Summary and Printing</a></li>
         <% if current_user_uuid.present? -%>
-          <li id="labware-state-button"><a href="<%= @presenter.statechange_link(self) %>" class="navbar-link" rel="labware-state-button" data-icon="gear"><%= @presenter.statechange_label %></a></li>
+          <li id="labware-state-button">
+            <a href="<%= @presenter.statechange_link(self) %>" class="<%= @presenter.if_statechange_active('navbar-link') %>" rel="labware-state-button" data-icon="gear" <%= @presenter.statechange_attributes %>>
+              <%= @presenter.statechange_label %>
+            </a>
+          </li>
           <li id="well-failing-button"><a href="#" class="navbar-link" rel="well-failing-button" data-icon="delete">Fail Wells</a></li>
           <li id="labware-creation-button"><a href="#" class="navbar-link" rel="labware-creation-button" data-icon="add">Create next plate</a></li>
         <% end -%>
       </ul>
     </div>
   <% end -%>
+<!-- <li><a href="#popupRobots" data-rel="popup" data-inline="true" data-transition="flip">Robots</a></li> -->
+  <div data-role="popup" id="popupRobots" data-theme="b">
+    <ul data-role="listview" data-inset="true" style="min-width:210px;">
+      <li data-role="divider" data-theme="b">Robots</li>
+      <% @presenter.each_robot do |robot_id,robot_name| %>
+        <li><a href="<%= robot_path(robot_id) %>" ><%= robot_name %></a></li>
+      <% end %>
+    </ul>
+  </div>
+
 
   <%= content do %>
     <%= flash_messages %>
@@ -32,6 +45,10 @@
         <div id="labware-summary" class="scape-ui-block">
           <%= render(:partial => @presenter.summary_partial, :locals => { :presenter => @presenter }) %>
         </div>
+        <% @presenter.csv_file_links.each do |link| %>
+          <%= link_to("Download Worksheet CSV #{link.first}", link.last, :rel => "external") %>
+        <% end %>
+
           <%#= link_to "Download Worksheet CSV", "#{illumina_b_plate_path(@presenter.labware.uuid)}.csv", :rel => "external" %>
 
         <div id="well-failing" class="scape-ui-block" style="display:none;">
@@ -40,7 +57,6 @@
           <%= render(:partial => 'fail_wells', :locals => { :presenter => @presenter }) if well_failing_applicable?(@presenter) %>
         </div>
       </div>
-
 
       <div class="ui-block-b">
         <div id="plate-printing"  class="scape-ui-block" style="display:none;">
@@ -72,9 +88,11 @@
             </ol>
           </div>
 
-          <%= @presenter.control_additional_creation do %>
-            <h2>Create Child Plate</h2>
-            <%= render(:partial => @presenter.additional_creation_partial, :locals => { :presenter => @presenter }) %>
+          <%= @presenter.control_additional_creation do -%>
+            <h2>Create Child <%= @presenter.default_child_purpose.asset_type.titleize %></h2>
+            <% @presenter.valid_purposes do |purpose| %>
+              <%= render(:partial => @presenter.additional_creation_partial, :locals => { :presenter => @presenter, :purpose => purpose }) %>
+            <% end %>
           <% end %>
         </div>
 

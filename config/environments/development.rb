@@ -1,3 +1,6 @@
+#This file is part of Illumina-B Pipeline is distributed under the terms of GNU General Public License version 3 or later;
+#Please refer to the LICENSE and README files for information on licensing and authorship of this file.
+#Copyright (C) 2011,2012 Genome Research Ltd.
 IlluminaBPipeline::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -25,7 +28,7 @@ IlluminaBPipeline::Application.configure do
 
   config.api_connection_options               = ActiveSupport::OrderedOptions.new
   config.api_connection_options.namespace     = 'IlluminaB'
-  config.api_connection_options.url           = 'http://localhost:3000/api/1/'
+  config.api_connection_options.url           = ENV.fetch('API_URL','http://localhost:3000/api/1/')
   config.api_connection_options.authorisation = 'development'
 
 
@@ -38,6 +41,18 @@ IlluminaBPipeline::Application.configure do
 
   config.admin_email          = "nnnnnnnnnnnnnnnn"
   config.exception_recipients = "nnnnnnnnnnnnnnnn"
+
+  config.qc_submission_name = "MiSeq for QC"
+  # By default used first study/project
+  config.study_uuid = nil
+  config.project_uuid = nil
+  config.request_options = {
+    "read_length" => 11,
+    "fragment_size_required" => {
+      "from" => 100,
+      "to"   => 100
+    }
+  }
 
 end
 

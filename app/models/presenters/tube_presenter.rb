@@ -1,3 +1,6 @@
+#This file is part of Illumina-B Pipeline is distributed under the terms of GNU General Public License version 3 or later;
+#Please refer to the LICENSE and README files for information on licensing and authorship of this file.
+#Copyright (C) 2011,2012,2013 Genome Research Ltd.
 module Presenters
 
   class TubePresenter
@@ -33,17 +36,31 @@ module Presenters
       "#{labware.label.prefix} #{labware.label.text|| LABEL_TEXT}"
     end
 
+    def label_name
+      "#{labware.barcode.prefix} #{labware.barcode.number}"
+    end
+
     def control_child_links(&block)
       # Mostly, no.
+    end
+
+    def default_statechange_label
+      "Move tube to next state"
     end
 
     # The state is delegated to the tube
     delegate :state, :to => :labware
 
+    def label_description
+      "#{prioritized_name(labware.name, 10)} #{label_text}"
+    end
 
-    def location
-      # TODO: Consider adding location to tube api as well
-      :illumina_b
+    def sample_count
+      labware.aliquots.count
+    end
+
+    def label_suffix
+      "P#{sample_count}"
     end
 
     # Purpose returns the plate or tube purpose of the labware.

@@ -1,3 +1,6 @@
+#This file is part of Illumina-B Pipeline is distributed under the terms of GNU General Public License version 3 or later;
+#Please refer to the LICENSE and README files for information on licensing and authorship of this file.
+#Copyright (C) 2011,2012,2013 Genome Research Ltd.
 class PlatesController < LabwareController
   module LabwareWrangler
     def locate_labware_identified_by(id)
@@ -6,6 +9,8 @@ class PlatesController < LabwareController
   end
 
   include PlatesController::LabwareWrangler
+
+  before_filter :check_for_current_user!, :only => [ :update, :fail_wells ]
 
   def fail_wells
     wells_to_fail = params[:plate][:wells].select { |_,v| v == '1' }.map(&:first)
